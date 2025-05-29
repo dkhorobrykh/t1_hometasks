@@ -1,3 +1,13 @@
+cache:
+  defaultExpirationInSeconds: 60
+
+logging:
+  level:
+    org.springframework: INFO
+
+metric:
+  maximumMethodDurationInMillis: 1000
+
 spring:
   application:
     name: t1-mainProject
@@ -11,7 +21,3 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: true
-
-logging:
-  level:
-    org.springframework: INFO
