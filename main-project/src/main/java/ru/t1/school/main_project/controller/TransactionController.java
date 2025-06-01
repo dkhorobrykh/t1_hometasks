@@ -2,7 +2,7 @@ package ru.t1.school.main_project.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.model.dto.TransactionDto;
@@ -21,36 +21,40 @@ public class TransactionController {
 
     @GetMapping
     @Operation(summary = "Get all transactions")
-    public ResponseEntity<List<TransactionDto>> getAllTransactions() {
+    @ResponseStatus(HttpStatus.OK)
+    public List<TransactionDto> getAllTransactions() {
         var result = transactionService.getAll();
-        return ResponseEntity.ok(transactionMapper.toDto(result));
+        return transactionMapper.toDto(result);
     }
 
     @GetMapping("{transactionId}")
     @Operation(summary = "Get transaction by ID")
-    public ResponseEntity<TransactionDto> getTransactionById(@PathVariable(name = "transactionId") Long transactionId) {
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDto getTransactionById(@PathVariable(name = "transactionId") Long transactionId) {
         var result = transactionService.getById(transactionId);
-        return ResponseEntity.ok(transactionMapper.toDto(result));
+        return transactionMapper.toDto(result);
     }
 
     @PostMapping
     @Operation(summary = "Create a new transaction")
-    public ResponseEntity<TransactionDto> createTransaction(@RequestBody AddTransactionDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public TransactionDto createTransaction(@RequestBody AddTransactionDto dto) {
         var result = transactionService.createTransaction(dto);
-        return ResponseEntity.ok(transactionMapper.toDto(result));
+        return transactionMapper.toDto(result);
     }
 
     @DeleteMapping("{transactionId}")
     @Operation(summary = "Delete transaction by ID")
-    public ResponseEntity<?> deleteTransaction(@PathVariable(name = "transactionId") Long transactionId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTransaction(@PathVariable(name = "transactionId") Long transactionId) {
         transactionService.deleteTransaction(transactionId);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{transactionId}")
     @Operation(summary = "Update transaction by ID")
-    public ResponseEntity<TransactionDto> updateTransaction(@PathVariable(name = "transactionId") Long transactionId, @RequestBody AddTransactionDto dto) {
+    @ResponseStatus(HttpStatus.OK)
+    public TransactionDto updateTransaction(@PathVariable(name = "transactionId") Long transactionId, @RequestBody AddTransactionDto dto) {
         var result = transactionService.updateTransaction(transactionId, dto);
-        return ResponseEntity.ok(transactionMapper.toDto(result));
+        return transactionMapper.toDto(result);
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
+import ru.t1.school.main_project.exception.type.TransactionNotFoundException;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.repository.TransactionRepository;
@@ -27,7 +28,7 @@ public class TransactionService {
     @LogDataSourceError
     public Transaction getById(Long transactionId) {
         return transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new IllegalArgumentException("Transaction not found with id: " + transactionId));
+                .orElseThrow(() -> new TransactionNotFoundException(transactionId));
     }
 
     @LogDataSourceError
@@ -44,7 +45,7 @@ public class TransactionService {
     @LogDataSourceError
     public void deleteTransaction(Long transactionId) {
         if (!transactionRepository.existsById(transactionId)) {
-            throw new IllegalArgumentException("Transaction not found with id: " + transactionId);
+            throw new TransactionNotFoundException(transactionId);
         }
         transactionRepository.deleteById(transactionId);
     }

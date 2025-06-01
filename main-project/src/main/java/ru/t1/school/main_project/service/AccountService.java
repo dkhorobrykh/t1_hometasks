@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
+import ru.t1.school.main_project.exception.type.AccountNotFoundException;
+import ru.t1.school.main_project.exception.type.NegativeBalanceException;
 import ru.t1.school.main_project.model.Account;
 import ru.t1.school.main_project.model.dto.AddAccountDto;
 import ru.t1.school.main_project.repository.AccountRepository;
@@ -26,15 +28,15 @@ public class AccountService {
     @LogDataSourceError
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
-                .orElseThrow(() -> new IllegalArgumentException("Account not found with id: " + accountId));
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
     @LogDataSourceError
     public Account createAccount(AddAccountDto dto) {
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Balance cannot be negative");
+            throw new NegativeBalanceException();
         }
-        var client = clientService.getClientById(dto.getClientId());
+        var client = clientService.getById(dto.getClientId());
         var account = Account.builder()
                 .accountType(dto.getAccountType())
                 .balance(dto.getBalance())
@@ -46,7 +48,7 @@ public class AccountService {
     @LogDataSourceError
     public void deleteAccount(Long accountId) {
         if (!accountRepository.existsById(accountId)) {
-            throw new IllegalArgumentException("Account not found with id: " + accountId);
+            throw new AccountNotFoundException(accountId);
         }
         accountRepository.deleteById(accountId);
     }
@@ -55,7 +57,7 @@ public class AccountService {
     public Account updateAccount(Long accountId, AddAccountDto dto) {
         var account = getById(accountId);
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Balance cannot be negative");
+            throw new NegativeBalanceException();
         }
         account.setAccountType(dto.getAccountType());
         account.setBalance(dto.getBalance());

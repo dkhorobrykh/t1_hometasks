@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
+import ru.t1.school.main_project.exception.type.ClientNotFoundException;
 import ru.t1.school.main_project.model.Client;
 import ru.t1.school.main_project.model.dto.AddClientDto;
 import ru.t1.school.main_project.repository.ClientRepository;
@@ -25,7 +26,7 @@ public class ClientService {
     @LogDataSourceError
     public Client getById(Long clientId) {
         return clientRepository.findById(clientId)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + clientId));
+                .orElseThrow(() -> new ClientNotFoundException(clientId));
     }
 
     @LogDataSourceError
@@ -42,15 +43,9 @@ public class ClientService {
     @LogDataSourceError
     public void deleteClient(Long clientId) {
         if (!clientRepository.existsById(clientId)) {
-            throw new IllegalArgumentException("Client not found with id: " + clientId);
+            throw new ClientNotFoundException(clientId);
         }
         clientRepository.deleteById(clientId);
-    }
-
-    @LogDataSourceError
-    public Client getClientById(Long clientId) {
-        return clientRepository.findById(clientId)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found with clientId: " + clientId));
     }
 
     @LogDataSourceError

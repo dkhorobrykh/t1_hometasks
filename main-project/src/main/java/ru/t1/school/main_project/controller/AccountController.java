@@ -2,7 +2,7 @@ package ru.t1.school.main_project.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.t1.school.main_project.model.dto.AddAccountDto;
 import ru.t1.school.main_project.model.dto.AccountDto;
@@ -20,36 +20,40 @@ public class AccountController {
 
     @GetMapping
     @Operation(summary = "Get all accounts")
-    public ResponseEntity<List<AccountDto>> getAccounts() {
+    @ResponseStatus(HttpStatus.OK)
+    public List<AccountDto> getAccounts() {
         var result = accountService.getAll();
-        return ResponseEntity.ok(accountMapper.toDto(result));
+        return accountMapper.toDto(result);
     }
 
     @GetMapping("{accountId}")
     @Operation(summary = "Get account by ID")
-    public ResponseEntity<AccountDto> getAccountById(@PathVariable(name = "accountId") Long accountId) {
+    @ResponseStatus(HttpStatus.OK)
+    public AccountDto getAccountById(@PathVariable(name = "accountId") Long accountId) {
         var result = accountService.getById(accountId);
-        return ResponseEntity.ok(accountMapper.toDto(result));
+        return accountMapper.toDto(result);
     }
 
     @PostMapping
     @Operation(summary = "Create a new account")
-    public ResponseEntity<AccountDto> createAccount(@RequestBody AddAccountDto dto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public AccountDto createAccount(@RequestBody AddAccountDto dto) {
         var result = accountService.createAccount(dto);
-        return ResponseEntity.ok(accountMapper.toDto(result));
+        return accountMapper.toDto(result);
     }
 
     @DeleteMapping("{accountId}")
     @Operation(summary = "Delete account by ID")
-    public ResponseEntity<?> deleteAccount(@PathVariable(name = "accountId") Long accountId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAccount(@PathVariable(name = "accountId") Long accountId) {
         accountService.deleteAccount(accountId);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{accountId}")
     @Operation(summary = "Update account by ID")
-    public ResponseEntity<AccountDto> updateAccount(@PathVariable(name = "accountId") Long accountId, @RequestBody AddAccountDto dto) {
+    @ResponseStatus(HttpStatus.OK)
+    public AccountDto updateAccount(@PathVariable(name = "accountId") Long accountId, @RequestBody AddAccountDto dto) {
         var result = accountService.updateAccount(accountId, dto);
-        return ResponseEntity.ok(accountMapper.toDto(result));
+        return accountMapper.toDto(result);
     }
 }
