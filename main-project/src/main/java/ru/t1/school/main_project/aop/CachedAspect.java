@@ -12,6 +12,7 @@ import ru.t1.school.main_project.aop.cache.CacheEntry;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -21,10 +22,9 @@ import java.util.concurrent.ConcurrentMap;
 @RequiredArgsConstructor
 public class CachedAspect {
 
+    private static final ConcurrentMap<String, ConcurrentMap<Long, CacheEntry>> cache = new ConcurrentHashMap<>();
     @Value("${cache.defaultExpirationInSeconds:60}")
     private Long defaultExpirationInSeconds;
-
-    private static final ConcurrentMap<String, ConcurrentMap<Long, CacheEntry>> cache = new ConcurrentHashMap<>();
 
     @Around("@annotation(cached)")
     public Object around(ProceedingJoinPoint joinPoint, Cached cached) throws Throwable {
@@ -54,11 +54,9 @@ public class CachedAspect {
             log.info("Кэшированный объект {} с id {} не найден, запрашиваем новый", type, neededId);
         }
 
-        Object result = null;
+        var result = joinPoint.proceed();
 
-        try {
-            result = joinPoint.proceed();
-        } finally {
+        if (!(result instanceof Optional && ((Optional<?>) result).isEmpty())) {
             var newCacheEntry = CacheEntry.builder()
                     .object(result)
                     .expirationTime(Instant.now().plus(defaultExpirationInSeconds, ChronoUnit.SECONDS))
@@ -75,7 +73,7 @@ public class CachedAspect {
     }
 
     private void putInCache(String type, Long id, CacheEntry entry) {
-        cache.computeIfAbsent(type, k -> new ConcurrentHashMap<>()).put(id, entry);
+        cache.computeIfAbsent(type, _ -> new ConcurrentHashMap<>()).put(id, entry);
     }
 
     private void removeFromCache(String type, Long id) {
