@@ -2511,3 +2511,7 @@ INSERT INTO public.transaction (id, account_id, amount, datetime) VALUES (1755, 
 INSERT INTO public.transaction (id, account_id, amount, datetime) VALUES (1756, 505, -740.82, '2025-03-02 19:03:08');
 INSERT INTO public.transaction (id, account_id, amount, datetime) VALUES (1757, 505, -709.79, '2025-05-07 17:24:53');
 INSERT INTO public.transaction (id, account_id, amount, datetime) VALUES (1758, 505, -614.59, '2025-03-12 12:51:21');
+
+SELECT setval('client_id_seq', (SELECT MAX(id) FROM client) + 1);
+SELECT setval('account_id_seq', (SELECT MAX(id) FROM account) + 1);
+SELECT setval('transaction_id_seq', (SELECT MAX(id) FROM transaction) + 1);
