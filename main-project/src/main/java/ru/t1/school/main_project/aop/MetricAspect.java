@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.t1.school.main_project.model.TimeLimitExceedLog;
-import ru.t1.school.main_project.service.TimeLimitExceedLogService;
+import ru.t1.school.main_project.service.MetricsService;
 
 import java.time.Instant;
 
@@ -18,7 +18,7 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class MetricAspect {
 
-    private final TimeLimitExceedLogService timeLimitExceedLogService;
+    private final MetricsService metricsService;
     @Value("${metric.maximumMethodDurationInMillis:1000}")
     private Long maximumMethodDuration;
 
@@ -44,7 +44,8 @@ public class MetricAspect {
                         .signature(signature)
                         .duration(duration)
                         .build();
-                timeLimitExceedLogService.save(logEntry);
+
+                metricsService.saveTimeLimitExceedLog(logEntry);
             } else {
                 log.info("Метод {} выполнен успешно за {} мс", signature, duration);
             }

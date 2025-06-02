@@ -1,6 +1,19 @@
 cache:
   defaultExpirationInSeconds: 60
 
+kafka:
+  bootstrap:
+    server: ${KAFKA_SERVER:localhost:9092}
+  producer:
+    delivery-timeout-ms: 10000
+    enable-idempotence: true
+    max-block-ms: 10000
+    retries: 3
+    retry-backoff-ms: 1000
+    request-timeout-ms: 5000
+  topic:
+    metrics: t1_demo_metrics
+
 logging:
   level:
     org.springframework: INFO

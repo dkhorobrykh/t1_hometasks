@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import ru.t1.school.main_project.model.DataSourceErrorLog;
-import ru.t1.school.main_project.service.DataSourceErrorLogService;
+import ru.t1.school.main_project.service.MetricsService;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class LogErrorAspect {
-    private final DataSourceErrorLogService dataSourceErrorLogService;
+    private final MetricsService metricsService;
 
     @AfterThrowing(
             pointcut = "@annotation(ru.t1.school.main_project.aop.annotation.LogDataSourceError)",
@@ -42,6 +42,6 @@ public class LogErrorAspect {
                 .signature(signature)
                 .build();
 
-        dataSourceErrorLogService.save(log);
+        metricsService.saveDataSourceError(log);
     }
 }
