@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import ru.t1.school.common.model.AccountStatus;
+import ru.t1.school.common.model.AccountType;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Table(
@@ -17,6 +20,14 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "accountWithClient",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "client")
+                }
+        )
+})
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +44,16 @@ public class Account {
 
     @Column(name = "balance", nullable = false)
     private BigDecimal balance;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private AccountStatus status;
+
+    @Builder.Default
+    @Column(name = "account_id", nullable = false, unique = true)
+    private UUID accountId = UUID.randomUUID();
+
+    @Column(name = "frozen_amount", nullable = false)
+    private BigDecimal frozenAmount;
 }

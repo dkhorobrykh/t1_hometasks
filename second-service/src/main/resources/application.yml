@@ -1,0 +1,45 @@
+kafka:
+  bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
+  producer:
+    delivery-timeout-ms: 10000
+    enable-idempotence: true
+    max-block-ms: 10000
+    retries: 3
+    retry-backoff-ms: 1000
+    request-timeout-ms: 5000
+  consumer:
+    session-timeout-ms: 10000
+    use-type-info-header: false
+    max-partition-fetch-bytes: 300000
+    max-poll-interval-ms: 300000
+    max-poll-records: 10
+    enable-auto-commit: false
+    auto-offset-commit: earliest
+    heartbeat-interval-ms: 3000
+    group-id:
+      transaction-accept: t1-demo-transaction-accept-group
+  topic:
+    transaction-accept: t1_demo_transaction_accept
+    transaction-result: t1_demo_transaction_result
+
+logging:
+  level:
+    org.springframework: INFO
+
+spring:
+  application:
+    name: t1-secondProject
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+transactions:
+  max-number-of-transactions-per-account-at-period: 3
+  time-period-in-seconds: 600

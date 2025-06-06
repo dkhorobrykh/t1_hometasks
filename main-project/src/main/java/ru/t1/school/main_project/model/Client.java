@@ -30,6 +30,6 @@ public class Client {
     private String middleName;
 
     @Builder.Default
-    @Column(name = "client_id", nullable = false)
+    @Column(name = "client_id", nullable = false, unique = true)
     private UUID clientId = UUID.randomUUID();
 }

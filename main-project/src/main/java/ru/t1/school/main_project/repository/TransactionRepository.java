@@ -7,10 +7,12 @@ import ru.t1.school.main_project.model.Account;
 import ru.t1.school.main_project.model.Transaction;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    @Cached("transaction")
     @Override
     @NonNull
     Optional<Transaction> findById(@NonNull Long id);
+
+    Optional<Transaction> findByTransactionId(UUID transactionId);
 }

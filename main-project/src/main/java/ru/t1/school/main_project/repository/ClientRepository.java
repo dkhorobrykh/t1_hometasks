@@ -8,7 +8,6 @@ import ru.t1.school.main_project.model.Client;
 import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    @Cached("client")
     @Override
     @NonNull Optional<Client> findById(@NonNull Long id);
 }

@@ -9,6 +9,8 @@
 
     <modules>
         <module>main-project</module>
+        <module>second-service</module>
+        <module>common</module>
     </modules>
 
     <properties>

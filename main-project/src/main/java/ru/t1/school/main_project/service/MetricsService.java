@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.school.main_project.kafka.MetricsProducer;
-import ru.t1.school.main_project.kafka.dto.MetricsMessage;
-import ru.t1.school.main_project.kafka.dto.MetricsType;
+import ru.t1.school.common.kafka.dto.MetricsMessage;
+import ru.t1.school.common.kafka.dto.MetricsType;
 import ru.t1.school.main_project.model.DataSourceErrorLog;
 import ru.t1.school.main_project.model.TimeLimitExceedLog;
 
@@ -13,7 +13,7 @@ import ru.t1.school.main_project.model.TimeLimitExceedLog;
 @Slf4j
 @RequiredArgsConstructor
 public class MetricsService {
-    private final MetricsProducer<MetricsMessage> producer;
+    private final MetricsProducer producer;
     private final DataSourceErrorLogService dataSourceErrorLogService;
     private final TimeLimitExceedLogService timeLimitExceedLogService;
 

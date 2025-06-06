@@ -2,7 +2,6 @@ package ru.t1.school.main_project.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.Value;
 import ru.t1.school.main_project.model.Transaction;
 
 import java.io.Serializable;
@@ -18,5 +17,5 @@ public class AddTransactionDto implements Serializable {
     private Long accountId;
     @NotNull
     private BigDecimal amount;
-    private Instant datetime;
+    private Instant timestamp;
 }

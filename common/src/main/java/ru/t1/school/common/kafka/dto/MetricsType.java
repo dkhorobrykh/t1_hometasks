@@ -1,4 +1,4 @@
-package ru.t1.school.main_project.kafka.dto;
+package ru.t1.school.common.kafka.dto;
 
 public enum MetricsType {
     METRICS,

@@ -2,8 +2,7 @@ cache:
   defaultExpirationInSeconds: 60
 
 kafka:
-  bootstrap:
-    server: ${KAFKA_SERVER:localhost:9092}
+  bootstrap-servers: ${KAFKA_SERVER:localhost:9092}
   producer:
     delivery-timeout-ms: 10000
     enable-idempotence: true
@@ -11,8 +10,25 @@ kafka:
     retries: 3
     retry-backoff-ms: 1000
     request-timeout-ms: 5000
+  consumer:
+    session-timeout-ms: 10000
+    use-type-info-header: false
+    max-partition-fetch-bytes: 300000
+    max-poll-interval-ms: 300000
+    max-poll-records: 10
+    enable-auto-commit: false
+    auto-offset-commit: earliest
+    heartbeat-interval-ms: 3000
+    group-id:
+      transaction: t1-demo-transaction-group
+      transaction-accept: t1-demo-transaction-accept-group
+      metric: t1-demo-metric-group
+      transaction-result: t1-demo-transaction-result-group
   topic:
     metrics: t1_demo_metrics
+    transaction: t1_demo_transaction
+    transaction-accept: t1_demo_transaction_accept
+    transaction-result: t1_demo_transaction_result
 
 logging:
   level:
