@@ -30,8 +30,12 @@ public class TransactionAcceptConsumer {
 
         if (msgList != null) {
             msgList.forEach(msg -> {
-                transactionAcceptService.processTransaction(msg);
-                log.info("Запрос на подтверждение транзакции {} успешно обработан", msg);
+                try {
+                    transactionAcceptService.processTransaction(msg);
+                    log.info("Запрос на подтверждение транзакции {} успешно обработан", msg);
+                } catch (Exception e) {
+                    log.error("Ошибка при обработке сообщения {}: {}", msg, e.getMessage(), e);
+                }
             });
         }
 

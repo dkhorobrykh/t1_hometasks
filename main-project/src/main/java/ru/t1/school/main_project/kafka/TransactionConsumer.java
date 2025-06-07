@@ -30,8 +30,12 @@ public class TransactionConsumer {
 
         if (msgList != null) {
             msgList.forEach(msg -> {
-                transactionService.processTransaction(msg);
-                log.info("{} успешно обработан", msg);
+                try {
+                    transactionService.processTransaction(msg);
+                    log.info("{} успешно обработан", msg);
+                } catch (Exception e) {
+                    log.error("Ошибка при обработке сообщения {}: {}", msg, e.getMessage(), e);
+                }
             });
         }
 
