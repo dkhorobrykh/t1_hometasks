@@ -2,16 +2,18 @@ package ru.t1.school.main_project.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.t1.school.common.kafka.dto.TransactionAcceptMessage;
 import ru.t1.school.common.kafka.dto.TransactionMessage;
 import ru.t1.school.common.kafka.dto.TransactionResultMessage;
+import ru.t1.school.common.model.AccountStatus;
+import ru.t1.school.common.model.ClientStatus;
+import ru.t1.school.common.model.TransactionStatus;
 import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
 import ru.t1.school.main_project.exception.type.TransactionNotFoundException;
 import ru.t1.school.main_project.kafka.TransactionAcceptProducer;
-import ru.t1.school.common.kafka.dto.TransactionAcceptMessage;
-import ru.t1.school.common.model.AccountStatus;
 import ru.t1.school.main_project.model.Transaction;
-import ru.t1.school.common.model.TransactionStatus;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.repository.TransactionRepository;
 
@@ -24,10 +26,12 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class TransactionService {
-
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
     private final TransactionAcceptProducer transactionAcceptProducer;
+    private final ClientService clientService;
+    @Value("${transactions.maxNumberOfRejectedTransactionsByClient:3}")
+    private Integer maxNumberOfRejectedTransactionsByClient;
 
     @LogDataSourceError
     public List<Transaction> getAll() {
@@ -83,12 +87,42 @@ public class TransactionService {
     }
 
     public void processTransaction(TransactionMessage transactionMessage) {
+        var savedTransaction = saveTransaction(transactionMessage, TransactionStatus.REQUESTED);
+
+        var client = clientService.getByClientId(transactionMessage.getClientId());
+        if (client.getStatus() == null) {
+            client = clientService.updateClientStatus(transactionMessage.getClientId());
+            if (client == null) {
+                savedTransaction.setStatus(TransactionStatus.REJECTED);
+                transactionRepository.saveAndFlush(savedTransaction);
+                return;
+            }
+            log.info("Статус клиента {} обновлен. Новый статус - {}", client.getClientId(), client.getStatus());
+        } else {
+            var numberOfRejectedTransactions = transactionRepository.getNumberOfRejectedTransactionsByClientIdAndStatus(
+                    transactionMessage.getClientId(), TransactionStatus.REJECTED);
+            if (numberOfRejectedTransactions > maxNumberOfRejectedTransactionsByClient) {
+                accountService.arrestAccount(transactionMessage.getAccountId());
+                savedTransaction.setStatus(TransactionStatus.REJECTED);
+                transactionRepository.saveAndFlush(savedTransaction);
+                return;
+            }
+        }
+
+        if (client.getStatus().equals(ClientStatus.BLOCKED)) {
+            accountService.blockAccount(transactionMessage.getAccountId());
+            savedTransaction.setStatus(TransactionStatus.REJECTED);
+            transactionRepository.saveAndFlush(savedTransaction);
+            return;
+        }
+
         var account = accountService.getByAccountId(transactionMessage.getAccountId());
         if (!account.getStatus().equals(AccountStatus.OPEN)) {
             log.info("Счет {} не в статусе OPEN, транзакция {} не может быть обработана", account.getAccountId(), transactionMessage);
+            savedTransaction.setStatus(TransactionStatus.REJECTED);
+            transactionRepository.saveAndFlush(savedTransaction);
             return;
         }
-        var savedTransaction = saveTransaction(transactionMessage, TransactionStatus.REQUESTED);
 
         accountService.withdrawFunds(account.getId(), savedTransaction);
 

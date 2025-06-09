@@ -102,6 +102,13 @@ public class AccountService {
         log.info("Счет {} заблокирован", account.getAccountId());
     }
 
+    public void arrestAccount(UUID accountId) {
+        var account = getByAccountId(accountId);
+        account.setStatus(AccountStatus.ARRESTED);
+        accountRepository.saveAndFlush(account);
+        log.info("Счет {} арестован", account.getAccountId());
+    }
+
     public void returnAmountToAccount(UUID accountId, Transaction transaction) {
         var account = getByAccountId(accountId);
         account.setBalance(account.getBalance().add(transaction.getAmount()));

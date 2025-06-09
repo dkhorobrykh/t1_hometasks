@@ -37,6 +37,10 @@ logging:
 metric:
   maximumMethodDurationInMillis: 1000
 
+service-2:
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ5MzcyNjgyLCJleHAiOjE3NTE5NjQ2ODJ9.zoutEisz1wH2xCLZVRhLaHmnpryNpqlQ_aGA3_slsIK1ffPayz9qsHkytECFazzwEgB9rpQAlQl-cmJ17fVLxw
+  url: http://service-2:8080
+
 spring:
   application:
     name: t1-mainProject
@@ -50,3 +54,6 @@ spring:
     locations: classpath:db/migration
     baseline-on-migrate: true
     validate-on-migrate: true
+
+transactions:
+  maxNumberOfRejectedTransactionsByClient: 2

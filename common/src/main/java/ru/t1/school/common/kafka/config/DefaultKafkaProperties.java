@@ -1,13 +1,21 @@
 package ru.t1.school.common.kafka.config;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class DefaultKafkaProperties {
     private String bootstrapServers;
-    private ProducerProperties producer;
-    private ConsumerProperties consumer;
-    private TopicProperties topic;
+    @NestedConfigurationProperty
+    private ProducerProperties producer = new ProducerProperties();
+    @NestedConfigurationProperty
+    private ConsumerProperties consumer = new ConsumerProperties();
+    @NestedConfigurationProperty
+    private TopicProperties topic = new TopicProperties();
 
     @Data
     public static class ProducerProperties {
@@ -29,7 +37,8 @@ public abstract class DefaultKafkaProperties {
         private Boolean enableAutoCommit;
         private String autoOffsetCommit;
         private Integer heartbeatIntervalMs;
-        private GroupsProperties groupId;
+        @NestedConfigurationProperty
+        private GroupsProperties groupId = new GroupsProperties();
     }
 
     @Data
