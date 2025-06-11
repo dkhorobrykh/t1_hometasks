@@ -1,4 +1,4 @@
-package ru.t1.school.main_project.aop;
+package ru.t1.school.the_best_starter.aop;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,9 +6,8 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.dao.DataAccessException;
-import org.springframework.stereotype.Component;
-import ru.t1.school.main_project.model.DataSourceErrorLog;
-import ru.t1.school.main_project.service.MetricsService;
+import ru.t1.school.the_best_starter.model.DataSourceErrorLog;
+import ru.t1.school.the_best_starter.service.MetricsService;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -16,13 +15,12 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Aspect
-@Component
 @RequiredArgsConstructor
 public class LogErrorAspect {
     private final MetricsService metricsService;
 
     @AfterThrowing(
-            pointcut = "@annotation(ru.t1.school.main_project.aop.annotation.LogDataSourceError)",
+            pointcut = "@annotation(ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError)",
             throwing = "ex"
     )
     public void logDataSourceError(JoinPoint joinPoint, Throwable ex) {

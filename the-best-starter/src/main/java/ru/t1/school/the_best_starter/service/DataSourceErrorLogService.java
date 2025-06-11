@@ -1,12 +1,10 @@
-package ru.t1.school.main_project.service;
+package ru.t1.school.the_best_starter.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import ru.t1.school.main_project.model.DataSourceErrorLog;
-import ru.t1.school.main_project.repository.DataSourceErrorLogRepository;
+import ru.t1.school.the_best_starter.model.DataSourceErrorLog;
+import ru.t1.school.the_best_starter.repository.DataSourceErrorLogRepository;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class DataSourceErrorLogService {

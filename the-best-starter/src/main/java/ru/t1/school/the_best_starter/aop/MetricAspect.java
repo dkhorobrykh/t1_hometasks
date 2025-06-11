@@ -1,4 +1,4 @@
-package ru.t1.school.main_project.aop;
+package ru.t1.school.the_best_starter.aop;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,23 +6,21 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import ru.t1.school.main_project.model.TimeLimitExceedLog;
-import ru.t1.school.main_project.service.MetricsService;
+import ru.t1.school.the_best_starter.model.TimeLimitExceedLog;
+import ru.t1.school.the_best_starter.service.MetricsService;
 
 import java.time.Instant;
 
 @Slf4j
 @Aspect
-@Component
 @RequiredArgsConstructor
 public class MetricAspect {
 
     private final MetricsService metricsService;
-    @Value("${metric.maximumMethodDurationInMillis:1000}")
+    @Value("${the-best-starter.metric.maximumMethodDurationInMillis:1000}")
     private Long maximumMethodDuration;
 
-    @Around("@annotation(ru.t1.school.main_project.aop.annotation.Metric)")
+    @Around("@annotation(ru.t1.school.the_best_starter.aop.annotation.Metric)")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         var start = System.currentTimeMillis();
         var signature = joinPoint.getSignature().toLongString();

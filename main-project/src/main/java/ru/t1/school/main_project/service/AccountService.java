@@ -6,13 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.t1.school.common.model.AccountStatus;
 import ru.t1.school.common.model.TransactionStatus;
-import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
 import ru.t1.school.main_project.exception.type.AccountNotFoundException;
 import ru.t1.school.main_project.exception.type.NegativeBalanceException;
 import ru.t1.school.main_project.model.Account;
 import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.model.dto.AddAccountDto;
 import ru.t1.school.main_project.repository.AccountRepository;
+import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.math.BigDecimal;
 import java.util.List;

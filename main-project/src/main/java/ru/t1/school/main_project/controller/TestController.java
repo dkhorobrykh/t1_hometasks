@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.t1.school.main_project.aop.annotation.Metric;
+import ru.t1.school.the_best_starter.aop.annotation.Metric;
 
 import java.util.concurrent.ThreadLocalRandom;
 

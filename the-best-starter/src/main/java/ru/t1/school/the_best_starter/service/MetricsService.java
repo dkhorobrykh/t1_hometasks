@@ -1,15 +1,13 @@
-package ru.t1.school.main_project.service;
+package ru.t1.school.the_best_starter.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import ru.t1.school.main_project.kafka.MetricsProducer;
 import ru.t1.school.common.kafka.dto.MetricsMessage;
 import ru.t1.school.common.kafka.dto.MetricsType;
-import ru.t1.school.main_project.model.DataSourceErrorLog;
-import ru.t1.school.main_project.model.TimeLimitExceedLog;
+import ru.t1.school.the_best_starter.kafka.MetricsProducer;
+import ru.t1.school.the_best_starter.model.DataSourceErrorLog;
+import ru.t1.school.the_best_starter.model.TimeLimitExceedLog;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class MetricsService {

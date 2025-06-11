@@ -10,12 +10,12 @@ import ru.t1.school.common.kafka.dto.TransactionResultMessage;
 import ru.t1.school.common.model.AccountStatus;
 import ru.t1.school.common.model.ClientStatus;
 import ru.t1.school.common.model.TransactionStatus;
-import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
 import ru.t1.school.main_project.exception.type.TransactionNotFoundException;
 import ru.t1.school.main_project.kafka.TransactionAcceptProducer;
 import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.repository.TransactionRepository;
+import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.time.Instant;
 import java.util.List;

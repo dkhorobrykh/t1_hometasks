@@ -1,12 +1,10 @@
-package ru.t1.school.main_project.service;
+package ru.t1.school.the_best_starter.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import ru.t1.school.main_project.model.TimeLimitExceedLog;
-import ru.t1.school.main_project.repository.TimeLimitExceedLogRepository;
+import ru.t1.school.the_best_starter.model.TimeLimitExceedLog;
+import ru.t1.school.the_best_starter.repository.TimeLimitExceedLogRepository;
 
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class TimeLimitExceedLogService {

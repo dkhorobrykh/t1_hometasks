@@ -1,4 +1,4 @@
-package ru.t1.school.main_project.model;
+package ru.t1.school.the_best_starter.model;
 
 import jakarta.persistence.*;
 import lombok.*;

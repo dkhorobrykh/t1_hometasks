@@ -3,12 +3,12 @@ package ru.t1.school.main_project.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
 import ru.t1.school.main_project.exception.type.ClientNotFoundException;
 import ru.t1.school.main_project.external.ExternalClientService;
 import ru.t1.school.main_project.model.Client;
 import ru.t1.school.main_project.model.dto.AddClientDto;
 import ru.t1.school.main_project.repository.ClientRepository;
+import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.util.List;
 import java.util.UUID;

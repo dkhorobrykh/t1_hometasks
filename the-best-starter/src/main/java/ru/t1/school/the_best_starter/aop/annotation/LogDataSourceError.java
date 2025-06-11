@@ -1,4 +1,4 @@
-package ru.t1.school.main_project.aop.annotation;
+package ru.t1.school.the_best_starter.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
