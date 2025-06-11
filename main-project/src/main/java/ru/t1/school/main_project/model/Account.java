@@ -48,12 +48,14 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     @JdbcTypeCode(SqlTypes.VARCHAR)
-    private AccountStatus status;
+    @Builder.Default
+    private AccountStatus status = AccountStatus.OPEN;
 
     @Builder.Default
     @Column(name = "account_id", nullable = false, unique = true)
     private UUID accountId = UUID.randomUUID();
 
     @Column(name = "frozen_amount", nullable = false)
-    private BigDecimal frozenAmount;
+    @Builder.Default
+    private BigDecimal frozenAmount = BigDecimal.ZERO;
 }
