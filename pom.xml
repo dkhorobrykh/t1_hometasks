@@ -11,6 +11,7 @@
         <module>main-project</module>
         <module>second-service</module>
         <module>common</module>
+        <module>third_service</module>
     </modules>
 
     <properties>

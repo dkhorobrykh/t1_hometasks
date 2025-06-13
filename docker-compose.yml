@@ -33,6 +33,22 @@ services:
     networks:
       - backend
 
+  service-3:
+    build: ./third_service
+    container_name: service-3
+    ports:
+      - '8085:8080'
+    environment:
+      DB_HOST: ${DB_HOST:-postgresql-3:5432}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-admin}
+      DB_NAME: ${DB_NAME:-postgres}
+      KAFKA_SERVER: ${KAFKA_SERVER:-broker-1:29092,broker-2:29093}
+    depends_on:
+      - postgresql-3
+    networks:
+      - backend
+
   postgresql:
     image: 'postgres:latest'
     container_name: postgresql-1
@@ -60,6 +76,20 @@ services:
       - backend
     volumes:
       - pg-data-2:/var/lib/postgresql/data
+
+  postgresql-3:
+    image: 'postgres:latest'
+    container_name: postgresql-3
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5434:5432'
+    networks:
+      - backend
+    volumes:
+      - pg-data-3:/var/lib/postgresql/data
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -117,9 +147,39 @@ services:
     networks:
       - backend
 
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus:/etc/prometheus/
+    container_name: prometheus
+    hostname: prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    volumes:
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/dashboards/dashboard.yml:/etc/grafana/provisioning/dashboards/dashboard.yml
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    ports:
+      - '3000:3000'
+    networks:
+      - backend
+
 networks:
   backend:
 
 volumes:
   pg-data:
   pg-data-2:
+  pg-data-3:
