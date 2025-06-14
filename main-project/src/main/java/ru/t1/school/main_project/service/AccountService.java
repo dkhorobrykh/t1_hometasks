@@ -16,7 +16,6 @@ import ru.t1.school.main_project.model.Account;
 import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.model.dto.AddAccountDto;
 import ru.t1.school.main_project.repository.AccountRepository;
-import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,12 +32,12 @@ public class AccountService {
     @Value("${account.remove-arrest.quantity-per-time:5}")
     private int quantityPerTime;
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public List<Account> getAll() {
         return accountRepository.findAll();
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId));
@@ -49,7 +48,7 @@ public class AccountService {
                 .orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Account createAccount(AddAccountDto dto) {
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             throw new NegativeBalanceException();
@@ -63,7 +62,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public void deleteAccount(Long accountId) {
         if (!accountRepository.existsById(accountId)) {
             throw new AccountNotFoundException(accountId);
@@ -71,7 +70,7 @@ public class AccountService {
         accountRepository.deleteById(accountId);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Account updateAccount(Long accountId, AddAccountDto dto) {
         var account = getById(accountId);
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
@@ -136,7 +135,7 @@ public class AccountService {
                     .accountId(account.getAccountId())
                     .accountStatus(account.getStatus())
                     .build()).toList();
-            
+
             if (dto.isEmpty()) {
                 return;
             }

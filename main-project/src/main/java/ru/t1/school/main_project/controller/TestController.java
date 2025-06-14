@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.t1.school.the_best_starter.aop.annotation.Metric;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -19,7 +18,7 @@ public class TestController {
     @PostMapping
     @Operation(summary = "Протестировать @Metric аспект")
     @ResponseStatus(HttpStatus.OK)
-    @Metric
+//    @Metric
     public void test() {
         try {
             Thread.sleep(ThreadLocalRandom.current().nextInt(2500));

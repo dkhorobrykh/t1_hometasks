@@ -13,7 +13,6 @@ import ru.t1.school.main_project.external.ExternalClientService;
 import ru.t1.school.main_project.model.Client;
 import ru.t1.school.main_project.model.dto.AddClientDto;
 import ru.t1.school.main_project.repository.ClientRepository;
-import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +28,18 @@ public class ClientService {
     @Value("${client.unblock.quantity-per-time:5}")
     private int quantityPerTime;
 
-    @LogDataSourceError
+    // // @LogDataSourceError
     public List<Client> getAll() {
         return clientRepository.findAll();
     }
 
-    @LogDataSourceError
+    // // @LogDataSourceError
     public Client getById(Long clientId) {
         return clientRepository.findById(clientId)
                 .orElseThrow(() -> new ClientNotFoundException(clientId));
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Client createClient(AddClientDto dto) {
         var client = Client.builder()
                 .firstName(dto.getFirstName())
@@ -51,7 +50,7 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public void deleteClient(Long clientId) {
         if (!clientRepository.existsById(clientId)) {
             throw new ClientNotFoundException(clientId);
@@ -59,7 +58,7 @@ public class ClientService {
         clientRepository.deleteById(clientId);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Client updateClient(Long clientId, AddClientDto dto) {
         var client = getById(clientId);
         client.setFirstName(dto.getFirstName());
