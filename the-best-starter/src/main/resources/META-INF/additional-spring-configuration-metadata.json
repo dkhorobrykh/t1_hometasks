@@ -1,0 +1,7 @@
+{
+  "properties": [{
+    "name": "the-best-starter.metric.maximumMethodDurationInMillis",
+    "type": "java.lang.Long",
+    "description": "Maximum duration in milliseconds for a method to be considered as too slow. If the method execution time exceeds this value, it will be logged as a slow method."
+  }]
+}

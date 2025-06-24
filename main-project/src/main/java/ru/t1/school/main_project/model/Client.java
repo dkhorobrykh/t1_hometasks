@@ -2,6 +2,9 @@ package ru.t1.school.main_project.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+import ru.t1.school.common.model.ClientStatus;
 
 import java.util.UUID;
 
@@ -30,6 +33,11 @@ public class Client {
     private String middleName;
 
     @Builder.Default
-    @Column(name = "client_id", nullable = false)
+    @Column(name = "client_id", nullable = false, unique = true)
     private UUID clientId = UUID.randomUUID();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private ClientStatus status;
 }
