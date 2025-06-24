@@ -1,0 +1,6 @@
+ru.t1.school.the_best_starter.config.PropertiesConfig
+ru.t1.school.the_best_starter.config.ServiceConfig
+ru.t1.school.the_best_starter.config.JpaConfig
+ru.t1.school.the_best_starter.config.KafkaConfig
+ru.t1.school.the_best_starter.config.AspectConfig
+ru.t1.school.the_best_starter.kafka.config.KafkaProducerConfig
