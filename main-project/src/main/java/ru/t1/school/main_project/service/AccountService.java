@@ -1,17 +1,26 @@
 package ru.t1.school.main_project.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.t1.school.main_project.aop.annotation.LogDataSourceError;
+import ru.t1.school.common.model.AccountStatus;
+import ru.t1.school.common.model.TransactionStatus;
+import ru.t1.school.common.model.dto.AccountUnblockRequestDto;
 import ru.t1.school.main_project.exception.type.AccountNotFoundException;
 import ru.t1.school.main_project.exception.type.NegativeBalanceException;
+import ru.t1.school.main_project.external.ExternalBlockService;
 import ru.t1.school.main_project.model.Account;
+import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.model.dto.AddAccountDto;
 import ru.t1.school.main_project.repository.AccountRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -19,19 +28,27 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accountRepository;
     private final ClientService clientService;
+    private final ExternalBlockService externalBlockService;
+    @Value("${account.remove-arrest.quantity-per-time:5}")
+    private int quantityPerTime;
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public List<Account> getAll() {
         return accountRepository.findAll();
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Account getById(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new AccountNotFoundException(accountId));
     }
 
-    @LogDataSourceError
+    public Account getByAccountId(UUID accountId) {
+        return accountRepository.findByAccountId(accountId)
+                .orElseThrow(() -> new AccountNotFoundException(accountId));
+    }
+
+    // @LogDataSourceError
     public Account createAccount(AddAccountDto dto) {
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
             throw new NegativeBalanceException();
@@ -45,7 +62,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public void deleteAccount(Long accountId) {
         if (!accountRepository.existsById(accountId)) {
             throw new AccountNotFoundException(accountId);
@@ -53,7 +70,7 @@ public class AccountService {
         accountRepository.deleteById(accountId);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Account updateAccount(Long accountId, AddAccountDto dto) {
         var account = getById(accountId);
         if (dto.getBalance().compareTo(BigDecimal.ZERO) < 0) {
@@ -62,5 +79,90 @@ public class AccountService {
         account.setAccountType(dto.getAccountType());
         account.setBalance(dto.getBalance());
         return accountRepository.save(account);
+    }
+
+    @Transactional
+    public void withdrawFunds(Long accountId, Transaction transaction) {
+        var account = getById(accountId);
+        account.setBalance(account.getBalance().subtract(transaction.getAmount()));
+        accountRepository.saveAndFlush(account);
+        log.info("С аккаунта {} успешно снято {} по транзакции {}", account.getAccountId(), transaction.getAmount(), transaction.getTransactionId());
+    }
+
+    public void freezeAmountAndReturnIt(UUID accountId, Transaction transaction) {
+        var account = getByAccountId(accountId);
+
+        if (transaction.getStatus().equals(TransactionStatus.ACCEPTED) || // транзакция успешна, средства списаны, замораживаем
+                transaction.getStatus().equals(TransactionStatus.REQUESTED)) { // транзакция запрошена, средства списаны, замораживаем
+            account.setBalance(account.getBalance().add(transaction.getAmount()));
+            account.setFrozenAmount(account.getFrozenAmount().add(transaction.getAmount()));
+        }
+
+        accountRepository.saveAndFlush(account);
+        log.info("Сумма {} по транзакции {} заморожена на счете {}", transaction.getAmount(), transaction.getTransactionId(), account.getAccountId());
+    }
+
+    public void blockAccount(UUID accountId) {
+        var account = getByAccountId(accountId);
+        account.setStatus(AccountStatus.BLOCKED);
+        accountRepository.saveAndFlush(account);
+        log.info("Счет {} заблокирован", account.getAccountId());
+    }
+
+    public void arrestAccount(UUID accountId) {
+        var account = getByAccountId(accountId);
+        account.setStatus(AccountStatus.ARRESTED);
+        accountRepository.saveAndFlush(account);
+        log.info("Счет {} арестован", account.getAccountId());
+    }
+
+    public void returnAmountToAccount(UUID accountId, Transaction transaction) {
+        var account = getByAccountId(accountId);
+        account.setBalance(account.getBalance().add(transaction.getAmount()));
+        accountRepository.saveAndFlush(account);
+        log.info("Сумма {} по транзакции {} возвращена на счет {}", transaction.getAmount(), transaction.getTransactionId(), account.getAccountId());
+    }
+
+    public void removeArrestFromAccounts() {
+        log.debug("Начало снятия ареста со счетов");
+
+        var limit = PageRequest.of(0, quantityPerTime);
+        var accounts = accountRepository.findArrested(AccountStatus.ARRESTED, limit);
+        var unblockedAccounts = new ArrayList<Account>();
+
+        try {
+            var dto = accounts.stream().map(account -> AccountUnblockRequestDto.builder()
+                    .accountId(account.getAccountId())
+                    .accountStatus(account.getStatus())
+                    .build()).toList();
+
+            if (dto.isEmpty()) {
+                return;
+            }
+
+            var response = externalBlockService.removeArrestFromAccount(dto);
+
+            for (var res : response) {
+                var account = getByAccountId(res.getAccountId());
+
+                if (res.getResult()) {
+                    account.setStatus(AccountStatus.OPEN);
+                    accountRepository.saveAndFlush(account);
+                    unblockedAccounts.add(getById(account.getId()));
+                    log.info("Счет {} успешно разблокирован", account.getAccountId());
+                } else {
+                    log.warn("Не удалось снять арест со счета {}: {}", account.getAccountId(), res.getMessage());
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Ошибка при снятии ареста со счетов: {}", e.getMessage());
+        }
+
+        log.debug("Завершение снятия ареста со счетов, всего разблокировано счетов: {} / {}", unblockedAccounts.size(), accounts.size());
+    }
+
+    public long countArrestedAccounts() {
+        return accountRepository.countByStatus(AccountStatus.ARRESTED);
     }
 }

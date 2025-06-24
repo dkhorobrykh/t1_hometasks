@@ -1,0 +1,48 @@
+account:
+  remove-arrest:
+    delay-in-seconds: 10
+    quantity-per-time: 5
+
+cache:
+  defaultExpirationInSeconds: 60
+
+client:
+  unblock:
+    delay-in-seconds: 10
+    quantity-per-time: 5
+
+logging:
+  level:
+    org.springframework: INFO
+
+management:
+  endpoints:
+    web.exposure.include: health,prometheus,metrics,info,kafka,shutdown,restart,logfile
+  endpoint:
+    health:
+      show-details: always
+
+
+service-2:
+  token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzQ5MzcyNjgyLCJleHAiOjE3NTE5NjQ2ODJ9.zoutEisz1wH2xCLZVRhLaHmnpryNpqlQ_aGA3_slsIK1ffPayz9qsHkytECFazzwEgB9rpQAlQl-cmJ17fVLxw
+  url: http://localhost:1398/bsc-wire-mock/service-2:8080
+
+service-3:
+  url: http://localhost:1398/bsc-wire-mock/service-3:8080
+
+spring:
+  application:
+    name: t1-mainProject
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_TEST:localhost:5435}/${DB_NAME_TEST:postgres}
+    username: ${DB_USER_TEST:postgres}
+    password: ${DB_PASSWORD_TEST:admin}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+
+transactions:
+  maxNumberOfRejectedTransactionsByClient: 2

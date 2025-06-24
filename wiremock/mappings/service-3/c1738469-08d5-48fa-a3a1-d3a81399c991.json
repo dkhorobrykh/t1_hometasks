@@ -1,0 +1,60 @@
+{
+  "id" : "c1738469-08d5-48fa-a3a1-d3a81399c991",
+  "name" : "remove arrest (1 account)",
+  "request" : {
+    "urlPath" : "/service-3:8080/account/remove-arrest",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : [ {
+        "accountId" : "a67ddd93-c43a-4d87-842b-f772d02a28fe",
+        "accountStatus" : "ARRESTED"
+      } ],
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : false
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[\n  {\n    \"accountId\": \"a67ddd93-c43a-4d87-842b-f772d02a28fe\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  }\n]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "c1738469-08d5-48fa-a3a1-d3a81399c991",
+  "persistent" : true,
+  "scenarioName" : "service-3",
+  "requiredScenarioState" : "Started",
+  "metadata" : {
+    "proxyUrlPrefixToRemove" : "",
+    "proxyEnable" : false,
+    "proxyBaseUrl" : "http://",
+    "proxyResponseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "responseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "csvTableHeader" : "",
+    "csvMQTableHeader" : "",
+    "isCSV" : false,
+    "isMqCSV" : false,
+    "isAsyncCsv" : [ false ]
+  },
+  "insertionIndex" : 5,
+  "postServeActions" : [ {
+    "name" : "asyncAction",
+    "parameters" : {
+      "mqAsyncAction" : false,
+      "isAsyncAction" : false,
+      "httpResponse" : [ {
+        "asyncEnabled" : false,
+        "responseDefinition" : {
+          "headers" : {
+            "Content-Type" : [ "application/json" ]
+          }
+        }
+      } ],
+      "mqResponse" : { }
+    }
+  } ]
+}
