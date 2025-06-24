@@ -1,0 +1,52 @@
+{
+  "id" : "13254189-eef5-46b3-87a3-34c9d13b7da3",
+  "name" : "get client status",
+  "request" : {
+    "urlPath" : "/service-2:8080/client/b3bf1875-197a-46fe-b4a4-089de437df69",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\n  \"clientId\": \"b3bf1875-197a-46fe-b4a4-089de437df69\",\n  \"status\": \"ACTIVE\"\n}",
+    "headers" : {
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "13254189-eef5-46b3-87a3-34c9d13b7da3",
+  "persistent" : true,
+  "scenarioName" : "service-2",
+  "requiredScenarioState" : "Started",
+  "metadata" : {
+    "proxyUrlPrefixToRemove" : "",
+    "proxyEnable" : false,
+    "proxyBaseUrl" : "http://",
+    "proxyResponseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "responseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "csvTableHeader" : "",
+    "csvMQTableHeader" : "",
+    "isCSV" : false,
+    "isMqCSV" : false,
+    "isAsyncCsv" : [ false ]
+  },
+  "insertionIndex" : 6,
+  "postServeActions" : [ {
+    "name" : "asyncAction",
+    "parameters" : {
+      "mqAsyncAction" : false,
+      "isAsyncAction" : false,
+      "httpResponse" : [ {
+        "asyncEnabled" : false,
+        "responseDefinition" : {
+          "headers" : {
+            "Content-Type" : [ "application/json" ]
+          }
+        }
+      } ],
+      "mqResponse" : { }
+    }
+  } ]
+}
