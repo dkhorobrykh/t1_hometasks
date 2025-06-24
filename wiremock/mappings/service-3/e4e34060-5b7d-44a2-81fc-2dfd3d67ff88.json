@@ -1,0 +1,60 @@
+{
+  "id" : "e4e34060-5b7d-44a2-81fc-2dfd3d67ff88",
+  "name" : "unblock client (1 client)",
+  "request" : {
+    "urlPath" : "/service-3:8080/client/unblock",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : [ {
+        "clientId" : "97518d19-905c-4c6a-ba82-25d93fc33f95",
+        "clientStatus" : "BLOCKED"
+      } ],
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : false
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[\n  {\n    \"clientId\": \"97518d19-905c-4c6a-ba82-25d93fc33f95\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  }\n]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "e4e34060-5b7d-44a2-81fc-2dfd3d67ff88",
+  "persistent" : true,
+  "scenarioName" : "service-3",
+  "requiredScenarioState" : "Started",
+  "metadata" : {
+    "proxyUrlPrefixToRemove" : "",
+    "proxyEnable" : false,
+    "proxyBaseUrl" : "http://",
+    "proxyResponseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "responseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "csvTableHeader" : "",
+    "csvMQTableHeader" : "",
+    "isCSV" : false,
+    "isMqCSV" : false,
+    "isAsyncCsv" : [ false ]
+  },
+  "insertionIndex" : 4,
+  "postServeActions" : [ {
+    "name" : "asyncAction",
+    "parameters" : {
+      "mqAsyncAction" : false,
+      "isAsyncAction" : false,
+      "httpResponse" : [ {
+        "asyncEnabled" : false,
+        "responseDefinition" : {
+          "headers" : {
+            "Content-Type" : [ "application/json" ]
+          }
+        }
+      } ],
+      "mqResponse" : { }
+    }
+  } ]
+}

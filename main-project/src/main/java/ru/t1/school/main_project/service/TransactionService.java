@@ -15,7 +15,6 @@ import ru.t1.school.main_project.kafka.TransactionAcceptProducer;
 import ru.t1.school.main_project.model.Transaction;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.repository.TransactionRepository;
-import ru.t1.school.the_best_starter.aop.annotation.LogDataSourceError;
 
 import java.time.Instant;
 import java.util.List;
@@ -33,18 +32,18 @@ public class TransactionService {
     @Value("${transactions.maxNumberOfRejectedTransactionsByClient:3}")
     private Integer maxNumberOfRejectedTransactionsByClient;
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public List<Transaction> getAll() {
         return transactionRepository.findAll();
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Transaction getById(Long transactionId) {
         return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new TransactionNotFoundException(transactionId));
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Transaction createTransaction(AddTransactionDto dto) {
         var account = accountService.getById(dto.getAccountId());
         var transaction = Transaction.builder()
@@ -55,7 +54,7 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public void deleteTransaction(Long transactionId) {
         if (!transactionRepository.existsById(transactionId)) {
             throw new TransactionNotFoundException(transactionId);
@@ -63,7 +62,7 @@ public class TransactionService {
         transactionRepository.deleteById(transactionId);
     }
 
-    @LogDataSourceError
+    // @LogDataSourceError
     public Transaction updateTransaction(Long transactionId, AddTransactionDto dto) {
         var transaction = getById(transactionId);
         var account = accountService.getById(dto.getAccountId());
