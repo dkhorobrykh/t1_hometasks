@@ -1,0 +1,66 @@
+{
+  "id" : "e50b73ea-50c4-4b78-913f-cd9632744cd0",
+  "name" : "unblock client (3 clients)",
+  "request" : {
+    "urlPath" : "/service-3:8080/client/unblock",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : [ {
+        "clientId" : "b3bf1875-197a-46fe-b4a4-089de437df57",
+        "clientStatus" : "BLOCKED"
+      }, {
+        "clientId" : "555e6a58-9f75-4b09-b68f-47510c1310ed",
+        "clientStatus" : "BLOCKED"
+      }, {
+        "clientId" : "97518d19-905c-4c6a-ba82-25d93fc33f95",
+        "clientStatus" : "BLOCKED"
+      } ],
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : false
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[\n  {\n    \"clientId\": \"b3bf1875-197a-46fe-b4a4-089de437df57\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  },\n  {\n    \"clientId\": \"555e6a58-9f75-4b09-b68f-47510c1310ed\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  },\n  {\n    \"clientId\": \"97518d19-905c-4c6a-ba82-25d93fc33f95\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  }\n]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "e50b73ea-50c4-4b78-913f-cd9632744cd0",
+  "persistent" : true,
+  "scenarioName" : "service-3",
+  "requiredScenarioState" : "Started",
+  "metadata" : {
+    "proxyUrlPrefixToRemove" : "",
+    "proxyEnable" : false,
+    "proxyBaseUrl" : "http://",
+    "proxyResponseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "responseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "csvTableHeader" : "",
+    "csvMQTableHeader" : "",
+    "isCSV" : false,
+    "isMqCSV" : false,
+    "isAsyncCsv" : [ false ]
+  },
+  "insertionIndex" : 3,
+  "postServeActions" : [ {
+    "name" : "asyncAction",
+    "parameters" : {
+      "mqAsyncAction" : false,
+      "isAsyncAction" : false,
+      "httpResponse" : [ {
+        "asyncEnabled" : false,
+        "responseDefinition" : {
+          "headers" : {
+            "Content-Type" : [ "application/json" ]
+          }
+        }
+      } ],
+      "mqResponse" : { }
+    }
+  } ]
+}

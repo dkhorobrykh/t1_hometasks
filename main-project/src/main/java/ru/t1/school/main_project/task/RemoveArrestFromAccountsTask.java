@@ -2,6 +2,7 @@ package ru.t1.school.main_project.task;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.t1.school.main_project.service.AccountService;
@@ -11,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile("!test")
 public class RemoveArrestFromAccountsTask {
 
     private final AccountService accountService;

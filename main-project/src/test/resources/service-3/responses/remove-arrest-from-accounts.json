@@ -1,0 +1,17 @@
+[
+  {
+    "accountId": "b3bf1875-197a-46fe-b4a4-089de437df57",
+    "result": true,
+    "message": "some msg"
+  },
+  {
+    "accountId": "555e6a58-9f75-4b09-b68f-47510c1310ed",
+    "result": true,
+    "message": "some msg"
+  },
+  {
+    "accountId": "97518d19-905c-4c6a-ba82-25d93fc33f95",
+    "result": true,
+    "message": "some msg"
+  }
+]

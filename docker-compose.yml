@@ -11,6 +11,10 @@ services:
       DB_USER: ${DB_USER:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-admin}
       DB_NAME: ${DB_NAME:-postgres}
+      DB_HOST_TEST: ${DB_HOST_TEST:-postgresql:5435}
+      DB_USER_TEST: ${DB_USER_TEST:-postgres}
+      DB_PASSWORD_TEST: ${DB_PASSWORD_TEST:-admin}
+      DB_NAME_TEST: ${DB_NAME_TEST:-postgres}
       KAFKA_SERVER: ${KAFKA_SERVER:-broker-1:29092,broker-2:29093}
     depends_on:
       - postgresql
@@ -176,6 +180,13 @@ services:
     networks:
       - backend
 
+  wiremock-demo:
+    image: bscmsc/bsc-wire-mock:latest
+    ports:
+      - '1398:1398'
+    volumes:
+      - ./wiremock/mappings:/app/mappings
+
 networks:
   backend:
 
@@ -183,3 +194,4 @@ volumes:
   pg-data:
   pg-data-2:
   pg-data-3:
+  pg-data-test:
