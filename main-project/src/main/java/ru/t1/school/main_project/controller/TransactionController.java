@@ -1,9 +1,12 @@
 package ru.t1.school.main_project.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.t1.school.main_project.kafka.TransactionProducer;
+import ru.t1.school.common.kafka.dto.TransactionMessage;
 import ru.t1.school.main_project.model.dto.AddTransactionDto;
 import ru.t1.school.main_project.model.dto.TransactionDto;
 import ru.t1.school.main_project.model.mapper.TransactionMapper;
@@ -18,6 +21,7 @@ public class TransactionController {
 
     private final TransactionMapper transactionMapper;
     private final TransactionService transactionService;
+    private final TransactionProducer transactionProducer;
 
     @GetMapping
     @Operation(summary = "Get all transactions")
@@ -56,5 +60,12 @@ public class TransactionController {
     public TransactionDto updateTransaction(@PathVariable(name = "transactionId") Long transactionId, @RequestBody AddTransactionDto dto) {
         var result = transactionService.updateTransaction(transactionId, dto);
         return transactionMapper.toDto(result);
+    }
+
+    @PostMapping("to-kafka")
+    @Operation(summary = "Отправить новую транзакцию в Kafka")
+    @ResponseStatus(HttpStatus.OK)
+    public void sendTransactionToKafka(@Valid @RequestBody TransactionMessage transactionMessage) {
+        transactionProducer.send(transactionMessage);
     }
 }

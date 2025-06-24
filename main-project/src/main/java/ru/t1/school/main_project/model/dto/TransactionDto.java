@@ -1,7 +1,7 @@
 package ru.t1.school.main_project.model.dto;
 
 import lombok.Data;
-import lombok.Value;
+import ru.t1.school.common.model.TransactionStatus;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,5 +15,6 @@ public class TransactionDto implements Serializable {
     private Long id;
     private AccountDto account;
     private BigDecimal amount;
-    private Instant datetime;
+    private Instant timestamp;
+    private TransactionStatus status;
 }

@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  postgresql-test-db:
+    image: 'postgres:latest'
+    container_name: postgresql-test
+    environment:
+      - 'POSTGRES_DB=postgres'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=postgres'
+    ports:
+      - '5435:5432'
+    networks:
+      - backend
+    volumes:
+      - pg-data-test:/var/lib/postgresql/data

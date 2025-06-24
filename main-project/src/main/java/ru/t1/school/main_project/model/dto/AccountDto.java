@@ -1,8 +1,7 @@
 package ru.t1.school.main_project.model.dto;
 
 import lombok.Data;
-import lombok.Value;
-import ru.t1.school.main_project.model.AccountType;
+import ru.t1.school.common.model.AccountType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
