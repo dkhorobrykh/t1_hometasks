@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import ru.t1.school.common.kafka.config.DefaultKafkaProducerConfig;
-import ru.t1.school.common.kafka.dto.MetricsMessage;
 import ru.t1.school.common.kafka.dto.TransactionAcceptMessage;
 import ru.t1.school.common.kafka.dto.TransactionMessage;
 
@@ -37,18 +36,6 @@ public class KafkaProducerConfig extends DefaultKafkaProducerConfig {
     public KafkaTemplate<String, TransactionAcceptMessage> transactionAcceptKafkaTemplate() {
         KafkaTemplate<String, TransactionAcceptMessage> template = new KafkaTemplate<>(transactionAcceptProducerFactory());
         template.setDefaultTopic(kafkaProps.getTopic().getTransactionAccept());
-        return template;
-    }
-
-    @Bean("metricsProducerFactory")
-    public ProducerFactory<String, MetricsMessage> metricsProducerFactory() {
-        return defaultProducerFactory(kafkaProps);
-    }
-
-    @Bean("metricsKafkaTemplate")
-    public KafkaTemplate<String, MetricsMessage> metricsKafkaTemplate() {
-        KafkaTemplate<String, MetricsMessage> template = new KafkaTemplate<>(metricsProducerFactory());
-        template.setDefaultTopic(kafkaProps.getTopic().getMetrics());
         return template;
     }
 }

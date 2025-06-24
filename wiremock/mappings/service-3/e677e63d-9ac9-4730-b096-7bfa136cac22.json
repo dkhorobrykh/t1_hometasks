@@ -1,0 +1,66 @@
+{
+  "id" : "e677e63d-9ac9-4730-b096-7bfa136cac22",
+  "name" : "remove arrest (3 accounts)",
+  "request" : {
+    "urlPath" : "/service-3:8080/account/remove-arrest",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : [ {
+        "accountId" : "b3bf1875-197a-46fe-b4a4-089de437df57",
+        "accountStatus" : "ARRESTED"
+      }, {
+        "accountId" : "a67ddd93-c43a-4d87-842b-f772d02a28fe",
+        "accountStatus" : "ARRESTED"
+      }, {
+        "accountId" : "c8e14b0d-e43e-424a-8606-d7141939b392",
+        "accountStatus" : "ARRESTED"
+      } ],
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : false
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "[\n  {\n    \"accountId\": \"b3bf1875-197a-46fe-b4a4-089de437df57\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  },\n  {\n    \"accountId\": \"a67ddd93-c43a-4d87-842b-f772d02a28fe\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  },\n  {\n    \"accountId\": \"c8e14b0d-e43e-424a-8606-d7141939b392\",\n    \"result\": true,\n    \"message\": \"some msg\"\n  }\n]",
+    "headers" : {
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "e677e63d-9ac9-4730-b096-7bfa136cac22",
+  "persistent" : true,
+  "scenarioName" : "service-3",
+  "requiredScenarioState" : "Started",
+  "metadata" : {
+    "proxyUrlPrefixToRemove" : "",
+    "proxyEnable" : false,
+    "proxyBaseUrl" : "http://",
+    "proxyResponseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "responseHeaders" : {
+      "Content-Type" : "application/json"
+    },
+    "csvTableHeader" : "",
+    "csvMQTableHeader" : "",
+    "isCSV" : false,
+    "isMqCSV" : false,
+    "isAsyncCsv" : [ false ]
+  },
+  "insertionIndex" : 1,
+  "postServeActions" : [ {
+    "name" : "asyncAction",
+    "parameters" : {
+      "mqAsyncAction" : false,
+      "isAsyncAction" : false,
+      "httpResponse" : [ {
+        "asyncEnabled" : false,
+        "responseDefinition" : {
+          "headers" : {
+            "Content-Type" : [ "application/json" ]
+          }
+        }
+      } ],
+      "mqResponse" : { }
+    }
+  } ]
+}
